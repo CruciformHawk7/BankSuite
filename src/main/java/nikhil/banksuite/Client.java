@@ -27,6 +27,7 @@ public class Client {
     @NotNull
     @Min(2) @Max(15)
     private final SimpleIntegerProperty accountNumber;
+
     private final SimpleDoubleProperty balance;
     private final SimpleStringProperty password;
 
@@ -58,15 +59,7 @@ public class Client {
         }
         return out;
     }
-
-    Client() {
-        this.accountNumber = new SimpleIntegerProperty(0);
-        this.name = new SimpleStringProperty("name");
-        this.password = new SimpleStringProperty("password");
-        this.transactions = FXCollections.observableArrayList();
-        this.balance = new SimpleDoubleProperty(0);
-    }
-
+    
     public void setName(String name){
         this.name.set(name);
     }
@@ -93,14 +86,6 @@ public class Client {
 
     public double getBalance() {
         return balance.get();
-    }
-
-    public void setBalance(double balance) {
-        this.balance.set(balance);
-    }
-
-    public DoubleProperty balanceProperty() {
-        return this.balance;
     }
 
     public void setPassword(String password) {

@@ -22,13 +22,6 @@ class ClientUI extends Client {
         fillUp();
     }
 
-    ClientUI(Client cl) {
-        this.setAccountNumber(cl.getAccountNumber());
-        this.setName(cl.getName());
-        this.transactions = cl.transactions;
-        fillUp();
-    }
-
     public Stage generateClientStage() {
         Stage out = new Stage();
         Scene scene = new Scene(homeScreen, 800, 600);
@@ -73,7 +66,7 @@ class ClientUI extends Client {
     private void fillUp() {
         Label nameLabel = new Label("Welcome, " + this.getName());
         Label accountLabel = new Label("Account ID: " + this.getAccountNumber());
-        Label balanceLabel = new Label("Balance: Rs. " + this.getBalance());
+        Label balanceLabel = new Label("Balance: ₹" + this.getBalance());
 
         nameLabel.setFont(new Font(16));
         accountLabel.setFont(new Font(16));
