@@ -1,9 +1,16 @@
 package nikhil.banksuite;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * This class holds a DataModel for the Records. 
@@ -14,18 +21,18 @@ import javafx.beans.property.*;
 public class Record {
     private final SimpleIntegerProperty transactionID;
     private final SimpleDoubleProperty transactionAmount;
-    private final SimpleObjectProperty<LocalDate> transactionDate;
+    private final SimpleObjectProperty<GregorianCalendar> transactionDate;
     private final SimpleObjectProperty<TransactionType> transactionType;
     private final SimpleIntegerProperty fromID;
     private final SimpleIntegerProperty toID;
     private final SimpleStringProperty remark;
 
 
-    public Record(int transactionID, double transactionAmount, LocalDate transactionDate, TransactionType transactionType,
+    public Record(int transactionID, double transactionAmount, GregorianCalendar transactionDate, TransactionType transactionType,
                   int fromID, int toID, String remark) {
         this.transactionID = new SimpleIntegerProperty(transactionID);
         this.transactionAmount = new SimpleDoubleProperty(transactionAmount);
-        this.transactionDate = new SimpleObjectProperty<LocalDate>(transactionDate);
+        this.transactionDate = new SimpleObjectProperty<GregorianCalendar>(transactionDate);
         this.fromID = new SimpleIntegerProperty(fromID);
         this.toID = new SimpleIntegerProperty(toID);
         this.remark = new SimpleStringProperty(remark);
@@ -56,15 +63,16 @@ public class Record {
         return transactionAmount;
     }
 
-    public LocalDate getTransactionDate() {
-        return this.transactionDate.get();
+    public String getTransactionDate() {
+        SimpleDateFormat date = new SimpleDateFormat("EEEE, dd MMM YYYY HH:mm:ss z");
+        return date.format(this.transactionDate.get().getTime());
     }
 
-    public void setTransactionDate(LocalDate date) {
+    public void setTransactionDate(GregorianCalendar date) {
         this.transactionDate.set(date);
     }
 
-    public ObjectProperty<LocalDate> transactionDateProperty() {
+    public ObjectProperty<GregorianCalendar> transactionDateProperty() {
         return this.transactionDate;
     }
 

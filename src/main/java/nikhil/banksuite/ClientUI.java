@@ -2,11 +2,6 @@ package nikhil.banksuite;
 
 import java.util.Date;
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -32,23 +27,35 @@ class ClientUI extends Client {
     }
 
     private void attachRecordTable(TableView<Record> recordsTable) {
-        TableColumn<Record, Integer> idCol = new TableColumn<>("Trans. ID");
-        idCol.setMinWidth(80);
+        TableColumn<Record, Integer> idCol = new TableColumn<>("ID");
+        idCol.setMinWidth(40);
         idCol.setCellValueFactory(new PropertyValueFactory<Record, Integer>("TransactionID"));
-
-        TableColumn<Record, Double> amtCol = new TableColumn<>("Trans. Amount");
-        amtCol.setMinWidth(150);
-        amtCol.setCellValueFactory(new PropertyValueFactory<Record, Double>("TransactionAmount"));
-
-        TableColumn<Record, String> typeCol = new TableColumn<>("Type");
-        typeCol.setMinWidth(180);
-        typeCol.setCellValueFactory(new PropertyValueFactory<Record, String>("Credit"));
+        recordsTable.getColumns().add(idCol);
 
         TableColumn<Record, Date> dateCol = new TableColumn<>("Date");
         dateCol.setMinWidth(200);
         dateCol.setCellValueFactory(new PropertyValueFactory<Record, Date>("TransactionDate"));
-        
-        recordsTable.getColumns().addAll(idCol, dateCol, amtCol, typeCol);
+        recordsTable.getColumns().add(dateCol);
+
+        TableColumn<Record, Double> amtCol = new TableColumn<>("Amount");
+        amtCol.setMinWidth(120);
+        amtCol.setCellValueFactory(new PropertyValueFactory<Record, Double>("TransactionAmount"));
+        recordsTable.getColumns().add(amtCol);
+
+        TableColumn<Record, String> typeCol = new TableColumn<>("Type");
+        typeCol.setMinWidth(80);
+        typeCol.setCellValueFactory(new PropertyValueFactory<Record, String>("TransactionType"));
+        recordsTable.getColumns().add(typeCol);
+
+        TableColumn<Record, Integer> fromCol = new TableColumn<> ("Origin ID");
+        fromCol.setMinWidth(40);
+        fromCol.setCellValueFactory(new PropertyValueFactory<Record, Integer>("FromID"));
+        recordsTable.getColumns().add(fromCol);
+
+        TableColumn<Record, String> remCol = new TableColumn<>("Remarks");
+        remCol.setMinWidth(130);
+        remCol.setCellValueFactory(new PropertyValueFactory<Record, String>("remark"));
+        recordsTable.getColumns().add(remCol);        
     }
 
     private void fillUp() {
@@ -60,6 +67,7 @@ class ClientUI extends Client {
         table.setItems(super.transactions);
         table.setTableMenuButtonVisible(true);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         homeScreen = new GridPane();
         homeScreen.add(accountLabel, 1, 1);
         GridPane.setHalignment(accountLabel, HPos.CENTER);
@@ -68,6 +76,7 @@ class ClientUI extends Client {
         homeScreen.add(balanceLabel, 3, 1);
         GridPane.setHalignment(balanceLabel, HPos.CENTER);
         homeScreen.add(table, 1, 2, 3, 1);
+
         RowConstraints r1 = new RowConstraints();
         r1.setPercentHeight(10);
         RowConstraints r2 = new RowConstraints();
@@ -86,6 +95,7 @@ class ClientUI extends Client {
         leftPadding.setPercentWidth(2.5);
         ColumnConstraints rightPadding = new ColumnConstraints();
         rightPadding.setPercentWidth(2.5);
+
         homeScreen.getRowConstraints().addAll(topPadding, r1, r2, bottomPadding);
         homeScreen.getColumnConstraints().addAll(leftPadding, c1, c2, c3, rightPadding);
     }
