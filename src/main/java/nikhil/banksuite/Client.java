@@ -1,5 +1,6 @@
 package nikhil.banksuite;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -92,6 +93,14 @@ public class Client {
 
     public double getBalance() {
         return balance.get();
+    }
+
+    public void setBalance(double balance) {
+        this.balance.set(balance);
+    }
+
+    public DoubleProperty balanceProperty() {
+        return this.balance;
     }
 
     public void setPassword(String password) {

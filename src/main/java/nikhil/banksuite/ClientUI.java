@@ -3,6 +3,7 @@ package nikhil.banksuite;
 import java.util.Date;
 
 import javafx.geometry.HPos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -10,6 +11,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 class ClientUI extends Client {
     GridPane homeScreen;
@@ -24,6 +27,15 @@ class ClientUI extends Client {
         this.setName(cl.getName());
         this.transactions = cl.transactions;
         fillUp();
+    }
+
+    public Stage generateClientStage() {
+        Stage out = new Stage();
+        Scene scene = new Scene(homeScreen, 800, 600);
+        out.setScene(scene);
+        out.setTitle(getName());
+        out.show();
+        return out;
     }
 
     private void attachRecordTable(TableView<Record> recordsTable) {
@@ -59,9 +71,14 @@ class ClientUI extends Client {
     }
 
     private void fillUp() {
-        Label nameLabel = new Label("Name: " + this.getName());
+        Label nameLabel = new Label("Welcome, " + this.getName());
         Label accountLabel = new Label("Account ID: " + this.getAccountNumber());
         Label balanceLabel = new Label("Balance: Rs. " + this.getBalance());
+
+        nameLabel.setFont(new Font(16));
+        accountLabel.setFont(new Font(16));
+        balanceLabel.setFont(new Font(16));
+
         TableView<Record> table = new TableView<>();
         attachRecordTable(table);
         table.setItems(super.transactions);
@@ -69,10 +86,10 @@ class ClientUI extends Client {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         homeScreen = new GridPane();
-        homeScreen.add(accountLabel, 1, 1);
-        GridPane.setHalignment(accountLabel, HPos.CENTER);
-        homeScreen.add(nameLabel, 2, 1);
+        homeScreen.add(nameLabel, 1, 1);
         GridPane.setHalignment(nameLabel, HPos.CENTER);
+        homeScreen.add(accountLabel, 2, 1);
+        GridPane.setHalignment(accountLabel, HPos.CENTER);
         homeScreen.add(balanceLabel, 3, 1);
         GridPane.setHalignment(balanceLabel, HPos.CENTER);
         homeScreen.add(table, 1, 2, 3, 1);
@@ -80,9 +97,9 @@ class ClientUI extends Client {
         RowConstraints r1 = new RowConstraints();
         r1.setPercentHeight(10);
         RowConstraints r2 = new RowConstraints();
-        r2.setPercentHeight(85);
+        r2.setPercentHeight(87);
         RowConstraints topPadding = new RowConstraints();
-        topPadding.setPercentHeight(2.5);
+        topPadding.setPercentHeight(0.5);
         RowConstraints bottomPadding = new RowConstraints();
         bottomPadding.setPercentHeight(2.5);
         ColumnConstraints c1 = new ColumnConstraints();

@@ -14,15 +14,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        ClientUI clui = new ClientUI(DemoDataGenerator.generateFakeClient());
-        try {
-        DemoDataGenerator.writeToFile("test.txt");
-        } catch(Exception e) {
-            System.exit(0);
-        }
-        Scene scene = new Scene(clui.homeScreen, 1024, 576);
-        stage.setScene(scene);
-        stage.setTitle(clui.getName());
+        stage = new ClientUI(DemoDataGenerator.generateFakeClient()).generateClientStage();
         stage.show();
     }
 

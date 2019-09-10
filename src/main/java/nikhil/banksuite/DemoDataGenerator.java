@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 class DemoDataGenerator {
     public static Client generateFakeClient() {
-        Client cl = new Client("Client1", 100, 56000, "password");
+        Client cl = new Client("Client1", 100, 56000.0, "password");
         for (int i = 0; i< (Math.random()%20)+5; i++)
             cl.transactions.add(new Record(getRandomNumber(0, 50), getRandomNumber(0, 50000), randomGDate(), generateRandomType(),
                                (1400000 + getRandomNumber(0, 50)), getRandomNumber(0, 50), "Test"));
