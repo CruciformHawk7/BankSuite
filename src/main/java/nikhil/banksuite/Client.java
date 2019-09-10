@@ -8,9 +8,23 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 
 public class Client {
+    @Pattern(message="Invalid Name ${validatedValue}", regexp="^[A-Za-z_0-9]+$")
+    @NotNull @NotBlank @NotEmpty
+    @Size(max=15, min=8)
     private final SimpleStringProperty name;
+    
+    @NotNull
+    @Min(2) @Max(15)
     private final SimpleIntegerProperty accountNumber;
     private final SimpleDoubleProperty balance;
     private final SimpleStringProperty password;
@@ -23,6 +37,25 @@ public class Client {
         this.balance = new SimpleDoubleProperty(balance);
         this.password = new SimpleStringProperty(password);
         transactions = FXCollections.observableArrayList();
+    }
+
+    public boolean verifyPassword(String password) {
+        return this.password.get().equals(password);
+    }
+
+    @Override
+    public String toString() {
+        String out;
+        out="Name: " + this.name;
+        out+="\nAccount Number: " + this.accountNumber;
+        out+="\nBalance: " + balance;
+        out+="\nTransactions:\n TID\t\tTran Amt\t\tDate\t\tType";
+        for (Record p : transactions) {
+            out+="\n" + p.getTransactionID() + "\t\t";
+            out+=p.getTransactionAmount() + "\t\t"; 
+            out+=p.getTransactionDate()+ "\t\t" + p.getTransactionType();
+        }
+        return out;
     }
 
     Client() {
