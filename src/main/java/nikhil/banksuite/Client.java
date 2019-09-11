@@ -4,10 +4,13 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.GregorianCalendar;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -23,6 +26,11 @@ public class Client {
     @NotNull @NotBlank @NotEmpty
     @Size(max=15, min=8)
     private final SimpleStringProperty name;
+
+    private final SimpleStringProperty firstName;
+    private final SimpleStringProperty lastName;
+    private final SimpleIntegerProperty age;
+    private final SimpleObjectProperty<GregorianCalendar> dateOfBirth;
     
     @NotNull
     @Min(2) @Max(15)
@@ -33,11 +41,21 @@ public class Client {
 
     ObservableList<Record> transactions;
 
-    Client(String name, int accountNumber, double balance, String password) {
+    Client(String name, String firstName, String lastName, 
+           GregorianCalendar dateOfBirth, int accountNumber, double balance, String password) {
         this.name = new SimpleStringProperty(name);
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
+        this.dateOfBirth = new SimpleObjectProperty<GregorianCalendar>(dateOfBirth);
         this.accountNumber = new SimpleIntegerProperty(accountNumber);
         this.balance = new SimpleDoubleProperty(balance);
         this.password = new SimpleStringProperty(password);
+        long ye = this.dateOfBirth.get().getTimeInMillis();
+        long today = new GregorianCalendar().getTimeInMillis();
+        long result = ye-today;
+        GregorianCalendar calAge = new GregorianCalendar();
+        calAge.setTimeInMillis(result);
+        this.age = new SimpleIntegerProperty(calAge.get(GregorianCalendar.YEAR));
         transactions = FXCollections.observableArrayList();
     }
 
@@ -70,6 +88,38 @@ public class Client {
 
     public StringProperty nameProperty() {
         return name;
+    }
+
+    public String getFirstName() {
+        return this.firstName.get();
+    }
+
+    public StringProperty firstNameProperty() {
+        return this.firstName;
+    }
+
+    public String getLastName() {
+        return this.firstName.get();
+    }
+
+    public StringProperty lastNameProperty() {
+        return this.firstName;
+    }
+
+    public int getAge() {
+        return this.age.get();
+    }
+
+    public IntegerProperty ageProperty() {
+        return this.age;
+    }
+
+    public void setDateOfBirth(GregorianCalendar dateOfBirth) {
+        this.dateOfBirth.set(dateOfBirth);
+    }
+
+    public GregorianCalendar getDateOfBirth() {
+        return this.dateOfBirth.get();
     }
 
     public int getAccountNumber() {
