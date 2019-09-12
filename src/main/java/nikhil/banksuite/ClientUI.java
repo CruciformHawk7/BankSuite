@@ -16,21 +16,79 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 class ClientUI extends Client {
-    GridPane homeScreen;
 
     ClientUI(String name, String firstName, String lastName, 
             GregorianCalendar dateOfBirth, int accountNumber, double balance, String password) {
         super(name, firstName, lastName, dateOfBirth, accountNumber, balance, password);
-        fillUp();
     }
 
     public Stage generateClientStage() {
         Stage out = new Stage();
-        Scene scene = new Scene(homeScreen, 800, 600);
+        Scene scene = new Scene(fillUp(), 800, 600);
         out.setScene(scene);
         out.setTitle(getName());
         out.show();
         return out;
+    }
+
+    private GridPane fillUp() {
+        GridPane homeScreen = new GridPane();
+        Label nameLabel = new Label("Welcome, " + this.getName());
+        Label accountLabel = new Label("Account ID: " + this.getAccountNumber());
+        Label balanceLabel = new Label("Balance: ₹" + this.getBalance());
+        Label ageLabel = new Label("Date of Birth: " + this.textDateOfBirth());
+
+        nameLabel.setFont(new Font(16));
+        accountLabel.setFont(new Font(16));
+        balanceLabel.setFont(new Font(16));
+        ageLabel.setFont(new Font(16));
+
+        TableView<Record> table = new TableView<>();
+        attachRecordTable(table);
+        table.setItems(super.transactions);
+        table.setTableMenuButtonVisible(true);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        homeScreen = new GridPane();
+        homeScreen.add(nameLabel, 1, 1);
+        GridPane.setHalignment(nameLabel, HPos.CENTER);
+
+
+        homeScreen.add(ageLabel, 1, 2);
+        GridPane.setHalignment(ageLabel, HPos.CENTER);
+        homeScreen.add(accountLabel, 2, 2);
+        GridPane.setHalignment(accountLabel, HPos.CENTER);
+        homeScreen.add(balanceLabel, 3, 2);
+        GridPane.setHalignment(balanceLabel, HPos.CENTER);
+        
+        homeScreen.add(table, 1, 3, 3, 1);
+        
+
+        RowConstraints r1 = new RowConstraints();
+        r1.setPercentHeight(10);
+        RowConstraints r2 = new RowConstraints();
+        r2.setPercentHeight(87);
+        RowConstraints topPadding = new RowConstraints();
+        topPadding.setPercentHeight(0.5);
+        RowConstraints bottomPadding = new RowConstraints();
+        bottomPadding.setPercentHeight(2.5);
+        RowConstraints expandColumn = new RowConstraints();
+        expandColumn.setPercentHeight(0.1);
+        ColumnConstraints c1 = new ColumnConstraints();
+        c1.setPercentWidth(32);
+        ColumnConstraints c2 = new ColumnConstraints();
+        c2.setPercentWidth(32);
+        ColumnConstraints c3 = new ColumnConstraints();
+        c3.setPercentWidth(31);
+        ColumnConstraints leftPadding = new ColumnConstraints();
+        leftPadding.setPercentWidth(2.5);
+        ColumnConstraints rightPadding = new ColumnConstraints();
+        rightPadding.setPercentWidth(2.5);
+
+        homeScreen.getRowConstraints().addAll(topPadding, r1, expandColumn, r2, bottomPadding);
+        homeScreen.getColumnConstraints().addAll(leftPadding, c1, c2, c3, rightPadding);
+
+        return homeScreen;
     }
 
     private void attachRecordTable(TableView<Record> recordsTable) {
@@ -63,52 +121,5 @@ class ClientUI extends Client {
         remCol.setMinWidth(130);
         remCol.setCellValueFactory(new PropertyValueFactory<Record, String>("remark"));
         recordsTable.getColumns().add(remCol);        
-    }
-
-    private void fillUp() {
-        Label nameLabel = new Label("Welcome, " + this.getName());
-        Label accountLabel = new Label("Account ID: " + this.getAccountNumber());
-        Label balanceLabel = new Label("Balance: ₹" + this.getBalance());
-
-        nameLabel.setFont(new Font(16));
-        accountLabel.setFont(new Font(16));
-        balanceLabel.setFont(new Font(16));
-
-        TableView<Record> table = new TableView<>();
-        attachRecordTable(table);
-        table.setItems(super.transactions);
-        table.setTableMenuButtonVisible(true);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        homeScreen = new GridPane();
-        homeScreen.add(nameLabel, 1, 1);
-        GridPane.setHalignment(nameLabel, HPos.CENTER);
-        homeScreen.add(accountLabel, 2, 1);
-        GridPane.setHalignment(accountLabel, HPos.CENTER);
-        homeScreen.add(balanceLabel, 3, 1);
-        GridPane.setHalignment(balanceLabel, HPos.CENTER);
-        homeScreen.add(table, 1, 2, 3, 1);
-
-        RowConstraints r1 = new RowConstraints();
-        r1.setPercentHeight(10);
-        RowConstraints r2 = new RowConstraints();
-        r2.setPercentHeight(87);
-        RowConstraints topPadding = new RowConstraints();
-        topPadding.setPercentHeight(0.5);
-        RowConstraints bottomPadding = new RowConstraints();
-        bottomPadding.setPercentHeight(2.5);
-        ColumnConstraints c1 = new ColumnConstraints();
-        c1.setPercentWidth(32);
-        ColumnConstraints c2 = new ColumnConstraints();
-        c2.setPercentWidth(32);
-        ColumnConstraints c3 = new ColumnConstraints();
-        c3.setPercentWidth(31);
-        ColumnConstraints leftPadding = new ColumnConstraints();
-        leftPadding.setPercentWidth(2.5);
-        ColumnConstraints rightPadding = new ColumnConstraints();
-        rightPadding.setPercentWidth(2.5);
-
-        homeScreen.getRowConstraints().addAll(topPadding, r1, r2, bottomPadding);
-        homeScreen.getColumnConstraints().addAll(leftPadding, c1, c2, c3, rightPadding);
     }
 }
