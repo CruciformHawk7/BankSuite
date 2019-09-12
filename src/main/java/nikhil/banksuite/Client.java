@@ -10,6 +10,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import javax.validation.constraints.Max;
@@ -120,6 +121,11 @@ public class Client {
 
     public GregorianCalendar getDateOfBirth() {
         return this.dateOfBirth.get();
+    }
+
+    public String textDateOfBirth() {
+        SimpleDateFormat date = new SimpleDateFormat("EEEE, dd MMM YYYY HH:mm:ss z");
+        return date.format(this.dateOfBirth.get().getTime());
     }
 
     public int getAccountNumber() {
