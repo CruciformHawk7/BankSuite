@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    src: url("inter/Inter-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: italic;
+    src: url("inter/Inter-Italic.ttf");
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: bold;
+    src: url("inter/Inter-Bold.ttf");
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: bold italic;
+    src: url("inter/Inter-BoldItalic.ttf");
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: light;
+    src: url("inter/Inter-Light-BETA.ttf");
+}

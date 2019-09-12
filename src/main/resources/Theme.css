@@ -1,0 +1,74 @@
+#homeScreen {
+    -fx-background-color: #323232;
+}
+
+#mainLabel {
+    -fx-font: bold 14pt "Inter";
+    -fx-text-fill: #fff;
+}
+
+#homeScreenLight {
+    -fx-background-color: #f4f4f4;
+}
+
+#mainLabelLight {
+    -fx-font: bold 14pt "Inter";
+    -fx-text-fill: #000;
+}
+
+#subLabel {
+    -fx-font-family: "Inter";
+    -fx-text-fill: #fff;
+    -fx-font-size: 12;
+}
+
+#buttons {
+    -fx-font-family: "Inter";
+    -fx-background-color: linear-gradient(#008388 0%, #094c4e 100%);
+    -fx-text-fill: #fff;
+    -fx-background-radius: 3;
+}
+
+.table-view{
+    -fx-font-family: "Inter";
+    -fx-background-color: #000;
+    -fx-table-cell-border-color: #525252;
+}
+
+.table-view:focused{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: #525252; /* square(sqrt(6b) + sqrt (3d)/2) */
+    -fx-background-radius: 2;
+}
+
+.table-view .filler{
+    -fx-background-color: linear-gradient(#fff 0%, #6b6b6b 5%, #3d3d3d 90%, #424242 100%);
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: linear-gradient(#fff 0%, #6b6b6b 5%, #3d3d3d 90%, #424242 100%);
+    -fx-text-fill: white;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: white;
+}
+
+.table-row-cell{
+    -fx-background-color:  #6b6b6b;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #3d3d3d;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #008388;
+}

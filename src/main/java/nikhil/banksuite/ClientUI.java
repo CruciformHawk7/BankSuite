@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,6 +17,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -42,6 +42,9 @@ class ClientUI extends Client {
 
     private GridPane fillUp() {
         GridPane homeScreen = new GridPane();
+        homeScreen.setId("homeScreen");
+        homeScreen.getStylesheets().add("fonts.css");
+        homeScreen.getStylesheets().add("Theme.css");
         Label nameLabel = new Label("Welcome, " + this.getName());
         Label accountLabel = new Label("Account ID: " + this.getAccountNumber());
         Label balanceLabel = new Label("Balance: ₹" + this.getBalance());
@@ -51,25 +54,17 @@ class ClientUI extends Client {
         accountLabel.setVisible(false);
         ageLabel.setVisible(false);
 
-        nameLabel.setFont(new Font(16));
-        nameLabel.setTextFill(Color.web("#ffffff"));
-        accountLabel.setFont(new Font(12));
-        accountLabel.setTextFill(Color.web("#ffffff"));
-        balanceLabel.setFont(new Font(16));
-        balanceLabel.setTextFill(Color.web("#ffffff"));
-        ageLabel.setFont(new Font(12));
-        ageLabel.setTextFill(Color.web("#ffffff"));
+        nameLabel.setId("mainLabel");
+        accountLabel.setId("subLabel");
+        balanceLabel.setId("mainLabel");
+        ageLabel.setId("subLabel");
+        moreInfoBtn.setId("buttons");
 
         TableView<Record> table = new TableView<>();
-        table.setStyle("-fx-cell-color: #424242");
         attachRecordTable(table);
         table.setItems(super.transactions);
         table.setTableMenuButtonVisible(true);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        homeScreen = new GridPane();
-
-        homeScreen.getStylesheets().add("Dark.css");
         
         homeScreen.add(nameLabel, 1, 1);
         GridPane.setHalignment(nameLabel, HPos.CENTER);
