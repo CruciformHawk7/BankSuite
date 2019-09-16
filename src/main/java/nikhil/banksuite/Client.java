@@ -146,4 +146,12 @@ public class Client {
     public void setPassword(String password) {
         this.password.set(password);
     }
+
+    public void addBalance(double amount) {
+        balance.set(balance.get() + amount);
+    }
+
+    public void removeBalance(double amount) {
+        balance.set(balance.get() - amount);
+    }
 }

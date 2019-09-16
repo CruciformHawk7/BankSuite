@@ -76,7 +76,6 @@ class ClientUI extends Client {
         homeScreen.add(logOutBtn, 3, 2);
         GridPane.setHalignment(logOutBtn, HPos.RIGHT);
         
-        
         homeScreen.add(table, 1, 3, 3, 1);
 
         RowConstraints r1 = new RowConstraints();
@@ -121,7 +120,7 @@ class ClientUI extends Client {
         homeScreen.getRowConstraints().addAll(topPadding, r1, expandColumn, r2, bottomPadding);
         homeScreen.getColumnConstraints().addAll(leftPadding, c1, c2, c3, rightPadding);
 
-        Scene scene = new Scene(homeScreen, 800, 600, Color.web("#212121"));
+        Scene scene = new Scene(homeScreen, 800, 600);
         out.setScene(scene);
         out.setTitle(getName());
         
