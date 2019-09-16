@@ -34,13 +34,6 @@ class ClientUI extends Client {
 
     public Stage generateClientStage() {
         Stage out = new Stage();
-        Scene scene = new Scene(fillUp(), 800, 600, Color.web("#212121"));
-        out.setScene(scene);
-        out.setTitle(getName());
-        return out;
-    }
-
-    private GridPane fillUp() {
         GridPane homeScreen = new GridPane();
         homeScreen.setId("homeScreen");
         homeScreen.getStylesheets().add("fonts.css");
@@ -50,15 +43,18 @@ class ClientUI extends Client {
         Label balanceLabel = new Label("Balance: ₹" + this.getBalance());
         Label ageLabel = new Label("Born " + this.textDateOfBirth());
         Button moreInfoBtn = new Button("More ▼");
+        Button logOutBtn = new Button("Log Out");
 
         accountLabel.setVisible(false);
         ageLabel.setVisible(false);
+        logOutBtn.setVisible(false);
 
         nameLabel.setId("mainLabel");
         accountLabel.setId("subLabel");
         balanceLabel.setId("mainLabel");
         ageLabel.setId("subLabel");
         moreInfoBtn.setId("buttons");
+        logOutBtn.setId("buttons");
 
         TableView<Record> table = new TableView<>();
         attachRecordTable(table);
@@ -73,10 +69,12 @@ class ClientUI extends Client {
         homeScreen.add(moreInfoBtn, 3, 1);
         GridPane.setHalignment(moreInfoBtn, HPos.RIGHT);
 
-        homeScreen.add(ageLabel, 2, 2);
-        GridPane.setHalignment(ageLabel, HPos.CENTER);
         homeScreen.add(accountLabel, 1, 2);
         GridPane.setHalignment(accountLabel, HPos.CENTER);
+        homeScreen.add(ageLabel, 2, 2);
+        GridPane.setHalignment(ageLabel, HPos.CENTER);
+        homeScreen.add(logOutBtn, 3, 2);
+        GridPane.setHalignment(logOutBtn, HPos.RIGHT);
         
         
         homeScreen.add(table, 1, 3, 3, 1);
@@ -102,16 +100,18 @@ class ClientUI extends Client {
         ColumnConstraints rightPadding = new ColumnConstraints();
         rightPadding.setPercentWidth(2.5);
 
-        moreInfoBtn.setOnAction((event) -> {
+        moreInfoBtn.setOnAction((e) -> {
             if (!accountLabel.isVisible()) {
                 accountLabel.setVisible(true);
                 ageLabel.setVisible(true);
+                logOutBtn.setVisible(true);
                 expandColumn.setPercentHeight(8);
                 r2.setPercentHeight(r2.getPercentHeight()-8);
                 moreInfoBtn.setText("Less ▲");
             } else {
                 accountLabel.setVisible(false);
                 ageLabel.setVisible(false);
+                logOutBtn.setVisible(false);
                 expandColumn.setPercentHeight(0);
                 r2.setPercentHeight(r2.getPercentHeight()+8);
                 moreInfoBtn.setText("More ▼");
@@ -121,7 +121,15 @@ class ClientUI extends Client {
         homeScreen.getRowConstraints().addAll(topPadding, r1, expandColumn, r2, bottomPadding);
         homeScreen.getColumnConstraints().addAll(leftPadding, c1, c2, c3, rightPadding);
 
-        return homeScreen;
+        Scene scene = new Scene(homeScreen, 800, 600, Color.web("#212121"));
+        out.setScene(scene);
+        out.setTitle(getName());
+        
+        logOutBtn.setOnAction((e) -> {
+            out.close();
+        });
+
+        return out;
     }
 
     private void attachRecordTable(TableView<Record> recordsTable) {
