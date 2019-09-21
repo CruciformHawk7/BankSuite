@@ -42,11 +42,11 @@ class Home {
     protected Record nextTransaction() {
 
         int sender = getRandomNumber(0, BOTCOUNT-1);
-        int reciever = getRandomNumber(0, BOTCOUNT-1);
+        int receiver = getRandomNumber(0, BOTCOUNT-1);
         String remark;
-        if (reciever == sender && reciever < (BOTCOUNT - 1)) reciever++; 
-        else if (reciever == sender && reciever == BOTCOUNT) reciever--;
-        //System.err.println(reciever);
+        if (receiver == sender && receiver < (BOTCOUNT - 1)) receiver++; 
+        else if (receiver == sender && receiver == BOTCOUNT) receiver--;
+        //System.err.println(receiver);
         
         TransactionType transactionType = generateRandomType();
         GregorianCalendar transactionDate = nextDate(accountCreation);
@@ -56,20 +56,20 @@ class Home {
             remark = DEBITREMARKS[getRandomNumber(0, DEBITREMARKS.length-1)];
             if(transactionAmount<bots.get(sender).getBalance()) return null;
             bots.get(sender).removeBalance(transactionAmount);
-            bots.get(reciever).addBalance(transactionAmount);
+            bots.get(receiver).addBalance(transactionAmount);
         } else {
             remark = CREDITREMARKS[getRandomNumber(0, CREDITREMARKS.length-1)];
             bots.get(sender).addBalance(transactionAmount);
-            bots.get(reciever).removeBalance(transactionAmount);
+            bots.get(receiver).removeBalance(transactionAmount);
         }
 
         Record senderRecord = new Record(transactionCount, transactionAmount, transactionDate, 
-            transactionType, sender, reciever, remark);
-        Record recieverRecord = new Record(transactionCount++, transactionAmount, transactionDate, 
-            toggleTransactionType(transactionType), sender, reciever, remark);
+            transactionType, sender, receiver, remark);
+        Record receiverRecord = new Record(transactionCount++, transactionAmount, transactionDate, 
+            toggleTransactionType(transactionType), sender, receiver, remark);
 
         bots.get(sender).transactions.add(senderRecord);
-        bots.get(reciever).transactions.add(recieverRecord);
+        bots.get(receiver).transactions.add(receiverRecord);
 
         return senderRecord;
     }
