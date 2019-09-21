@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
@@ -22,17 +23,30 @@ class HomeUI extends Home {
         homeScreen.getStylesheets().add("fonts.css");
         homeScreen.getStylesheets().add("Theme.css");
         homeScreen.setId("homeScreen");
+        Stage t = new Stage();
         ObservableList<Record> allRecords = FXCollections.observableArrayList();
         TableView<Record> table = new TableView<>();
-        for (int i = 0; i<50; i++) { 
+        for (int i = 0; i < 50; i++) {
             var p = super.nextTransaction();
-            if (p==null) continue;
-            allRecords.add(p); 
+            if (p == null)
+                continue;
+            allRecords.add(p);
         }
         attachRecordTable(table);
         table.setItems(allRecords);
-        homeScreen.add(table,0,0);        
-        Stage t = new Stage();
+        homeScreen.add(table, 0, 0);
+        
+        table.setRowFactory(row -> {
+            TableRow<Record> record = new TableRow<>();
+            record.setOnMouseClicked(e -> {
+                ClientUI cl = super.getBotAt(record.getItem().getFromID());
+                Stage st = cl.generateClientStage();
+                st.show();
+            });
+            return record;
+        });
+
+
         t.setScene(new Scene(homeScreen, 800, 600));
         return t;
     }
@@ -58,12 +72,12 @@ class HomeUI extends Home {
         typeCol.setCellValueFactory(new PropertyValueFactory<Record, String>("TransactionType"));
         recordsTable.getColumns().add(typeCol);
 
-        TableColumn<Record, Integer> fromCol = new TableColumn<> ("Origin ID");
+        TableColumn<Record, Integer> fromCol = new TableColumn<>("Origin ID");
         fromCol.setMinWidth(40);
         fromCol.setCellValueFactory(new PropertyValueFactory<Record, Integer>("FromID"));
         recordsTable.getColumns().add(fromCol);
 
-        TableColumn<Record, Integer> toCol = new TableColumn<> ("To ID");
+        TableColumn<Record, Integer> toCol = new TableColumn<>("To ID");
         fromCol.setMinWidth(40);
         fromCol.setCellValueFactory(new PropertyValueFactory<Record, Integer>("ToID"));
         recordsTable.getColumns().add(toCol);
@@ -71,6 +85,6 @@ class HomeUI extends Home {
         TableColumn<Record, String> remCol = new TableColumn<>("Remarks");
         remCol.setMinWidth(130);
         remCol.setCellValueFactory(new PropertyValueFactory<Record, String>("remark"));
-        recordsTable.getColumns().add(remCol);        
+        recordsTable.getColumns().add(remCol);     
     }
 }

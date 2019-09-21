@@ -25,7 +25,7 @@ class Home {
     private static long accountCreation = 788918400000l;
     //Sunday, 1 January 1995 00:00
 
-    ObservableList<ClientUI> bots;
+    private ObservableList<ClientUI> bots;
     public int transactionCount;
 
     Home() {
@@ -99,4 +99,6 @@ class Home {
         Random r = new Random();
         return r.nextInt(max-min+1)+min;
     }
+
+    public ClientUI getBotAt(int index) { return bots.get(index); }
 }
