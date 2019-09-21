@@ -19,18 +19,19 @@ class HomeUI extends Home {
 
     public Stage stageGenerator() {
         GridPane homeScreen = new GridPane();
+        homeScreen.getStylesheets().add("fonts.css");
+        homeScreen.getStylesheets().add("Theme.css");
+        homeScreen.setId("homeScreen");
         ObservableList<Record> allRecords = FXCollections.observableArrayList();
-        TableView<Record> tables = new TableView<>();
+        TableView<Record> table = new TableView<>();
         for (int i = 0; i<50; i++) { 
             var p = super.nextTransaction();
             if (p==null) continue;
             allRecords.add(p); 
         }
-        attachRecordTable(tables);
-        tables.setItems(allRecords);
-        homeScreen.add(tables,0,0);
-
-
+        attachRecordTable(table);
+        table.setItems(allRecords);
+        homeScreen.add(table,0,0);        
         Stage t = new Stage();
         t.setScene(new Scene(homeScreen, 800, 600));
         return t;

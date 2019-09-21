@@ -46,7 +46,7 @@ class Home {
         String remark;
         if (reciever == sender && reciever < (BOTCOUNT - 1)) reciever++; 
         else if (reciever == sender && reciever == BOTCOUNT) reciever--;
-        System.err.println(reciever);
+        //System.err.println(reciever);
         
         TransactionType transactionType = generateRandomType();
         GregorianCalendar transactionDate = nextDate(accountCreation);
