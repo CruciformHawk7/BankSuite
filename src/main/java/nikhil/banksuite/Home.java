@@ -54,7 +54,7 @@ class Home {
 
         if (transactionType == TransactionType.Debit) {
             remark = DEBITREMARKS[getRandomNumber(0, DEBITREMARKS.length-1)];
-            if(transactionAmount<bots.get(sender).getBalance()) return null;
+            if(transactionAmount>bots.get(sender).getBalance()) return null;
             bots.get(sender).removeBalance(transactionAmount);
             bots.get(receiver).addBalance(transactionAmount);
         } else {
