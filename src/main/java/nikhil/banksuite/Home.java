@@ -2,7 +2,6 @@ package nikhil.banksuite;
 
 import java.util.GregorianCalendar;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
