@@ -82,7 +82,6 @@ class ClientUI extends Client {
         GridPane.setHalignment(ageLabel, HPos.CENTER);
         homeScreen.add(logOutBtn, 3, 2);
         GridPane.setHalignment(logOutBtn, HPos.RIGHT);
-        
         homeScreen.add(table, 1, 3, 3, 1);
 
         RowConstraints r1 = new RowConstraints();
