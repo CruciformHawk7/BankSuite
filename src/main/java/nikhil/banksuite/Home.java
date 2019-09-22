@@ -1,6 +1,8 @@
 package nikhil.banksuite;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Random;
 
 import javafx.collections.FXCollections;
@@ -26,17 +28,25 @@ class Home {
 
     private ObservableList<ClientUI> bots;
     public int transactionCount;
+    List<Integer> accountIds;
 
     Home() {
         bots = FXCollections.observableArrayList();
+        accountIds = new ArrayList<Integer>();
         for (int i = 0; i<BOTCOUNT; i++) {
             String[] splitName = NAMES[i].split(" ");
-            //System.err.println(splitName[0] + " " + splitName[1]);
+            int acNo = getRandomNumber(0, 200);
+            while (accountIds.contains(acNo)) acNo = getRandomNumber(0, 200);
+            accountIds.add(acNo);
             ClientUI cl = new ClientUI(splitName[0].toLowerCase(), splitName[0], splitName[1], nextDate(accountCreation), 
-                    getRandomNumber(0, 200), getRandomNumber(5000, 50000), "password");
+                    acNo, getRandomNumber(5000, 50000), "password");
             bots.add(cl);
         }
         transactionCount = 0;
+    }
+
+    public int getBotId(int accountNumber) {
+        return accountIds.indexOf(accountNumber);
     }
 
     protected Record nextTransaction() {
@@ -59,19 +69,25 @@ class Home {
             bots.get(receiver).addBalance(transactionAmount);
         } else {
             remark = CREDITREMARKS[getRandomNumber(0, CREDITREMARKS.length-1)];
+            if(transactionAmount>bots.get(receiver).getBalance()) return null;
             bots.get(sender).addBalance(transactionAmount);
             bots.get(receiver).removeBalance(transactionAmount);
         }
 
         Record senderRecord = new Record(transactionCount, transactionAmount, transactionDate, 
-            transactionType, sender, receiver, remark);
+            transactionType, bots.get(sender).getAccountNumber(), bots.get(receiver).getAccountNumber(), remark);
         Record receiverRecord = new Record(transactionCount++, transactionAmount, transactionDate, 
-            toggleTransactionType(transactionType), sender, receiver, remark);
+            toggleTransactionType(transactionType), bots.get(sender).getAccountNumber(), bots.get(receiver).getAccountNumber()
+            , remark);
 
         bots.get(sender).transactions.add(senderRecord);
         bots.get(receiver).transactions.add(receiverRecord);
 
         return senderRecord;
+    }
+
+    protected ObservableList<ClientUI> getBots() {
+        return this.bots;
     }
 
     private static TransactionType generateRandomType() {
