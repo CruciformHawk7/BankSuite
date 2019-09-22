@@ -54,7 +54,7 @@ class HomeUI extends Home {
 
         ToggleButton theme = new ToggleButton("Light");
         Button transact = new Button("Transact");
-        Label welcome = new Label("Transactions");        
+        Label welcome = new Label("Transactions");
         welcome.setId("mainLabel");
 
         Stage t = new Stage();
@@ -69,8 +69,6 @@ class HomeUI extends Home {
         new Thread(transactions).start();
 
         attachRecordTable(table);
-        //table.setItems(doTransactions());
-
         RowConstraints topPadding = new RowConstraints();
         topPadding.setPercentHeight(2);
         RowConstraints heading = new RowConstraints();
