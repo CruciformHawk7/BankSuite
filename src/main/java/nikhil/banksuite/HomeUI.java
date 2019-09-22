@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -35,6 +36,17 @@ class HomeUI extends Home {
         super();
     }
 
+    protected ObservableList<Record> doTransactions() {
+        ObservableList<Record> transactions = FXCollections.observableArrayList();
+        for (int i = 0; i < 50; i++) {
+            var p = super.nextTransaction();
+            if (p == null)
+                continue;
+            transactions.add(p);
+        }
+        return transactions;
+    }
+
     public Stage stageGenerator() {
         GridPane homeScreen = new GridPane();
         homeScreen.getStylesheets().add("fonts.css");
@@ -46,18 +58,18 @@ class HomeUI extends Home {
         welcome.setId("mainLabel");
 
         Stage t = new Stage();
-        ObservableList<Record> allRecords = FXCollections.observableArrayList();
         TableView<Record> table = new TableView<>();
+        
+        Task<ObservableList<Record>> transactions = new Task<ObservableList<Record>>() {
+            @Override public ObservableList<Record> call() {
+                return doTransactions();
+            }
+        };
 
-        for (int i = 0; i < 50; i++) {
-            var p = super.nextTransaction();
-            if (p == null)
-                continue;
-            allRecords.add(p);
-        }
+        new Thread(transactions).start();
 
         attachRecordTable(table);
-        table.setItems(allRecords);
+        //table.setItems(doTransactions());
 
         RowConstraints topPadding = new RowConstraints();
         topPadding.setPercentHeight(2);
@@ -91,7 +103,7 @@ class HomeUI extends Home {
         homeScreen.add(theme, 3, 1);
         homeScreen.add(transact, 2, 1);
         homeScreen.add(table, 1, 2, 3, 1);
-        
+
         theme.setOnAction(e3 -> {
             if (theme.getText() == "Light") {
                 //switch to light
@@ -112,7 +124,7 @@ class HomeUI extends Home {
         transact.setOnAction(e4 -> {
             var p = super.nextTransaction();
             while (p==null) p = super.nextTransaction();
-            allRecords.add(p);
+            table.getItems().add(p);
         });
 
         table.setRowFactory(row -> {
@@ -120,13 +132,20 @@ class HomeUI extends Home {
             record.setOnMouseClicked(e -> {
                 if (e.getClickCount() == 2) {
                     int bot = record.getItem().getFromID();
-                    ClientUI cl = super.getBotAt(bot);
+                    ClientUI cl = super.getBotAt(getBotId(bot));
                     if (theme.getText()=="Dark") passwordInput(cl, false);
                     else passwordInput(cl, true);
                 }
             });
             return record;
         });
+
+        try {
+            table.setItems(transactions.get());
+        } catch (Exception e) {
+            new ExceptionDialog(e).show();
+            System.exit(1);
+        }
 
         t.setScene(new Scene(homeScreen, 800, 600));
         return t;
