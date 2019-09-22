@@ -9,6 +9,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -38,11 +39,9 @@ class HomeUI extends Home {
         GridPane homeScreen = new GridPane();
         homeScreen.getStylesheets().add("fonts.css");
         homeScreen.getStylesheets().add("Theme.css");
-        homeScreen.setId("homeScreen");
 
         ToggleButton theme = new ToggleButton("Light");
-        theme.setId("buttons");
-
+        Button transact = new Button("Transact");
         Label welcome = new Label("Transactions");        
         welcome.setId("mainLabel");
 
@@ -72,22 +71,26 @@ class HomeUI extends Home {
         ColumnConstraints leftPadding = new ColumnConstraints();
         leftPadding.setPercentWidth(2);
         ColumnConstraints c1 = new ColumnConstraints();
-        c1.setPercentWidth(48);
+        c1.setPercentWidth(32);
         ColumnConstraints c2 = new ColumnConstraints();
-        c2.setPercentWidth(48);
+        c2.setPercentWidth(32);
+        ColumnConstraints c3 = new ColumnConstraints();
+        c3.setPercentWidth(32);
         ColumnConstraints rightPadding = new ColumnConstraints();
         rightPadding.setPercentWidth(2);
 
         homeScreen.getRowConstraints().addAll(topPadding, heading, body, bottomPadding);
-        homeScreen.getColumnConstraints().addAll(leftPadding, c1, c2, rightPadding);
+        homeScreen.getColumnConstraints().addAll(leftPadding, c1, c2, c3, rightPadding);
 
         t.getIcons().add(new Image("bank.png"));
 
         homeScreen.add(welcome, 1, 1);
         GridPane.setHalignment(theme, HPos.RIGHT);
-        GridPane.setValignment(theme, VPos.TOP);
-        homeScreen.add(theme, 2, 1);
-        homeScreen.add(table, 1, 2, 2, 1);
+        GridPane.setValignment(theme, VPos.CENTER);
+        GridPane.setHalignment(transact, HPos.CENTER);
+        homeScreen.add(theme, 3, 1);
+        homeScreen.add(transact, 2, 1);
+        homeScreen.add(table, 1, 2, 3, 1);
         
         theme.setOnAction(e3 -> {
             if (theme.getText() == "Light") {
@@ -104,6 +107,12 @@ class HomeUI extends Home {
                 t.getIcons().clear();
                 t.getIcons().add(new Image("bank.png"));
             }
+        });
+
+        transact.setOnAction(e4 -> {
+            var p = super.nextTransaction();
+            while (p==null) p = super.nextTransaction();
+            allRecords.add(p);
         });
 
         table.setRowFactory(row -> {

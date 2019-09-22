@@ -1,4 +1,4 @@
-#homeScreen {
+.root {
     -fx-background-color: #f4f4f4;
 }
 
@@ -13,11 +13,19 @@
     -fx-font-size: 12;
 }
 
-#buttons {
+.button, .toggle-button {
     -fx-font-family: "Inter";
-    -fx-background-color: linear-gradient(#1a9eeb 0%, #1e77eb 100%);
+    -fx-background-color: linear-gradient(#42b5f8 0%, #4a97fd 100%);
     -fx-text-fill: #000;
     -fx-background-radius: 3;
+}
+
+.button:hover, .toggle-button:hover {
+    -fx-background-color: linear-gradient(rgb(121, 199, 245) 0%, #94bdf1 100%);
+}
+
+.button:pressed, .toggle-button:pressed {
+    -fx-background-color: linear-gradient(#41a1d8 0%, #3581e4 100%);
 }
 
 .table-view {

@@ -1,4 +1,5 @@
-#homeScreen {
+.root {
+    -fx-font-family: "Inter";
     -fx-background-color: #323232;
 }
 
@@ -14,11 +15,19 @@
     -fx-font-size: 12;
 }
 
-#buttons {
+.button, .toggle-button{
     -fx-font-family: "Inter";
     -fx-background-color: linear-gradient(#008388 0%, #094c4e 100%);
     -fx-text-fill: #fff;
     -fx-background-radius: 3;
+}
+
+.button:hover, .toggle-button:hover {
+    -fx-background-color: linear-gradient(#04a6ac 0%, #108185 100%);
+}
+
+.button:pressed, .toggle-button:pressed {
+    -fx-background-color: linear-gradient(#016669 0%, #07383a 100%);
 }
 
 
