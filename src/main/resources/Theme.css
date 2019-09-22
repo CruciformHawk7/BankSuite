@@ -7,14 +7,6 @@
     -fx-text-fill: #fff;
 }
 
-#homeScreenLight {
-    -fx-background-color: #f4f4f4;
-}
-
-#mainLabelLight {
-    -fx-font: bold 14pt "Inter";
-    -fx-text-fill: #000;
-}
 
 #subLabel {
     -fx-font-family: "Inter";
@@ -28,6 +20,7 @@
     -fx-text-fill: #fff;
     -fx-background-radius: 3;
 }
+
 
 .table-view{
     -fx-font-family: "Inter";

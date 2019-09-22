@@ -1,0 +1,25 @@
+#homeScreen {
+    -fx-background-color: #f4f4f4;
+}
+
+#mainLabel {
+    -fx-font: bold 14pt "Inter";
+    -fx-text-fill: #000;
+}
+
+#subLabel {
+    -fx-font-family: "Inter";
+    -fx-text-fill: #000;
+    -fx-font-size: 12;
+}
+
+#buttons {
+    -fx-font-family: "Inter";
+    -fx-background-color: linear-gradient(#1a9eeb 0%, #1e77eb 100%);
+    -fx-text-fill: #000;
+    -fx-background-radius: 3;
+}
+
+.table-view {
+    -fx-font-family: "Inter";
+}

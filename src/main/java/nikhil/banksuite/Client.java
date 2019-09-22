@@ -99,11 +99,11 @@ public class Client {
     }
 
     public String getLastName() {
-        return this.firstName.get();
+        return this.lastName.get();
     }
 
     public StringProperty lastNameProperty() {
-        return this.firstName;
+        return this.lastName;
     }
 
     public int getAge() {

@@ -31,7 +31,8 @@ class Home {
     Home() {
         bots = FXCollections.observableArrayList();
         for (int i = 0; i<BOTCOUNT; i++) {
-            String[] splitName = NAMES[i].split("\\s+");
+            String[] splitName = NAMES[i].split(" ");
+            System.err.println(splitName[0] + " " + splitName[1]);
             ClientUI cl = new ClientUI(splitName[0].toLowerCase(), splitName[0], splitName[1], nextDate(accountCreation), 
                     getRandomNumber(0, 200), getRandomNumber(5000, 50000), "password");
             bots.add(cl);

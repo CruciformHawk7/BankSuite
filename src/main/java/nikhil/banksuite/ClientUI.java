@@ -10,16 +10,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 class ClientUI extends Client {
@@ -32,18 +28,29 @@ class ClientUI extends Client {
         super(name, firstName, lastName, dateOfBirth, accountNumber, balance, password);
     }
 
-    public Stage generateClientStage() {
+    public Stage generateClientStage(boolean isDark) {
         Stage out = new Stage();
         GridPane homeScreen = new GridPane();
         homeScreen.setId("homeScreen");
         homeScreen.getStylesheets().add("fonts.css");
-        homeScreen.getStylesheets().add("Theme.css");
+
+        if (isDark) { 
+            homeScreen.getStylesheets().add("Theme.css");
+            out.getIcons().add(new Image("bank.png"));
+        }
+        else { 
+            homeScreen.getStylesheets().add("LightTheme.css"); 
+            out.getIcons().add(new Image("bank2.png"));
+        }
+
         Label nameLabel = new Label("Welcome, " + this.getName());
         Label accountLabel = new Label("Account ID: " + this.getAccountNumber());
         Label balanceLabel = new Label("Balance: ₹" + this.getBalance());
         Label ageLabel = new Label("Born " + this.textDateOfBirth());
         Button moreInfoBtn = new Button("More ▼");
         Button logOutBtn = new Button("Log Out");
+        ToggleButton theme = new ToggleButton("Light");
+        theme.setId("buttons");
 
         accountLabel.setVisible(false);
         ageLabel.setVisible(false);
@@ -127,6 +134,8 @@ class ClientUI extends Client {
         logOutBtn.setOnAction((e) -> {
             out.close();
         });
+
+        out.getIcons().add(new Image("bank.png")); 
 
         return out;
     }
