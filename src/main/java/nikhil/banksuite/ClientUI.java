@@ -20,12 +20,14 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 class ClientUI extends Client {
 
@@ -198,12 +200,20 @@ class ClientUI extends Client {
 
     public Stage sendMoneyDialog(boolean isDark, ObservableList<ClientUI> bots, HomeUI caller) {
         Stage m = new Stage();
+        m.initStyle(StageStyle.UTILITY);
         GridPane gd = new GridPane();
-        m.setScene(new Scene(gd, 250, 200));
+        m.setScene(new Scene(gd, 350, 200));
+        m.setTitle("Transaction");
 
         if (isDark) gd.getStylesheets().add("Theme.css");
         else gd.getStylesheets().add("LightTheme.css");
+        m.getIcons().add(new Image("bank.png"));
         int sep = 20;
+
+        ColumnConstraints padding  = new ColumnConstraints();
+        padding.setPercentWidth(5);
+        ColumnConstraints contents = new ColumnConstraints();
+        contents.setPercentWidth(90);
 
         RowConstraints first = new RowConstraints();
         first.setPercentHeight(sep);
@@ -217,34 +227,36 @@ class ClientUI extends Client {
         fifth.setPercentHeight(sep);
 
         gd.getRowConstraints().addAll(first, second, third, fourth, fifth);
+        gd.getColumnConstraints().addAll(padding, contents, padding);
 
         Label pick = new Label("Pick an account: ");
         pick.setId("subLabel");
-        gd.add(pick, 0, 0);
-        GridPane.setValignment(pick, VPos.BOTTOM);
+        gd.add(pick, 1, 0);
+        GridPane.setValignment(pick, VPos.CENTER);
 
         ComboBox<Integer> accPicker = new ComboBox<Integer>(accounts);
-        gd.add(accPicker, 0, 1);
+        gd.add(accPicker, 1, 1);
         GridPane.setValignment(accPicker, VPos.TOP);
 
         Label enter = new Label("Transaction Amount(Balance: ₹" + this.getBalance() + "):");
         enter.setId("subLabel");
-        gd.add(enter, 0, 2);
-        GridPane.setValignment(enter, VPos.BOTTOM);
+        gd.add(enter, 1, 2);
+        GridPane.setValignment(enter, VPos.CENTER);
 
         TextField amt = new TextField();
-        gd.add(amt, 0, 3);
+        gd.add(amt, 1, 3);
         GridPane.setValignment(amt, VPos.TOP);
 
         HBox options = new HBox();
         Button Ok = new Button("Send");
-        Ok.setStyle("-fx-padding: 0 10 0 0");
+        Ok.setStyle("-fx-margin: 0 10 0 0");
+        
         Button Cancel = new Button("Cancel");
         Region spacer = new Region();
         spacer.setPrefWidth(20);
-        options.getChildren().addAll(Ok, Cancel, spacer);
-        gd.add(options, 0, 4);
-        options.setStyle("-fx-padding: 0 0 0 60");
+        options.getChildren().addAll(Ok, spacer, Cancel);
+        gd.add(options, 1, 4);
+        options.setStyle("-fx-padding: 0 0 0 180");
         GridPane.setValignment(options, VPos.CENTER);
         GridPane.setHalignment(options, HPos.RIGHT);
 
@@ -280,6 +292,12 @@ class ClientUI extends Client {
                     alert.showAndWait();
                 }
                 
+            }
+        });
+
+        amt.setOnKeyPressed((e3) -> {
+            if (e3.getCode().equals(KeyCode.ENTER)) {
+                Ok.fire();
             }
         });
 
