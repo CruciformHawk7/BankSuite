@@ -2,7 +2,6 @@ package nikhil.banksuite;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Random;
 
 import javafx.collections.FXCollections;
@@ -98,7 +97,7 @@ class Home {
     }
 
     protected ObservableList<ClientUI> getBots() {
-        return this.bots;
+        return bots;
     }
 
     private static TransactionType generateRandomType() {
@@ -107,11 +106,6 @@ class Home {
         if (p==0) ts = TransactionType.Credit;
         else ts = TransactionType.Debit;
         return ts;
-    }
-
-    private static TransactionType toggleTransactionType(TransactionType transactionType) {
-        if (transactionType == TransactionType.Credit) return TransactionType.Debit;
-        else return TransactionType.Credit;
     }
 
     private static GregorianCalendar nextDate(long fromDate) {
