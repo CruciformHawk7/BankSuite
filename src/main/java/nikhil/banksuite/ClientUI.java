@@ -199,7 +199,7 @@ class ClientUI extends Client {
     public Stage sendMoneyDialog(boolean isDark, ObservableList<ClientUI> bots, HomeUI caller) {
         Stage m = new Stage();
         GridPane gd = new GridPane();
-        m.setScene(new Scene(gd, 120, 200));
+        m.setScene(new Scene(gd, 250, 200));
 
         if (isDark) gd.getStylesheets().add("Theme.css");
         else gd.getStylesheets().add("LightTheme.css");
