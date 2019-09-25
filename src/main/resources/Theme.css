@@ -15,19 +15,21 @@
 }
 
 .button, .toggle-button{
+    -fx-border:1px solid #25729a; 
+    -fx-border-radius: 3px;
     -fx-font-family: "Inter";
-    -fx-background-color: linear-gradient(#00f 0%, #0000cc 100%);
-    -fx-border-color: #00f;
+    -fx-background-color: linear-gradient(to bottom, #3093c7, #1c5a85);
     -fx-text-fill: #fff;
-    -fx-background-radius: 3;
 }
 
 .button:hover, .toggle-button:hover {
-    -fx-background-color: linear-gradient(#0044ff 0%, #014cff 100%);
+    -fx-border:1px solid #377ea5;
+    -fx-background-color:  linear-gradient(to bottom, #41a9e0, #2979b3);
 }
 
 .button:pressed, .toggle-button:pressed {
-    -fx-background-color: linear-gradient(#00d 0%, #00c 100%);
+    -fx-border:1px solid #1c5675;
+    -fx-background-color: linear-gradient(to bottom, #26759e, #133d5b);
 }
 
 
