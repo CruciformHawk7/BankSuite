@@ -16,17 +16,18 @@
 
 .button, .toggle-button{
     -fx-font-family: "Inter";
-    -fx-background-color: linear-gradient(#008388 0%, #094c4e 100%);
+    -fx-background-color: linear-gradient(#00f 0%, #0000cc 100%);
+    -fx-border-color: #00f;
     -fx-text-fill: #fff;
     -fx-background-radius: 3;
 }
 
 .button:hover, .toggle-button:hover {
-    -fx-background-color: linear-gradient(#04a6ac 0%, #108185 100%);
+    -fx-background-color: linear-gradient(#0044ff 0%, #014cff 100%);
 }
 
 .button:pressed, .toggle-button:pressed {
-    -fx-background-color: linear-gradient(#016669 0%, #07383a 100%);
+    -fx-background-color: linear-gradient(#00d 0%, #00c 100%);
 }
 
 
@@ -71,7 +72,8 @@
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #008388;
+    -fx-background-color: linear-gradient(#00f 0%, #0000cc 100%);
+    
 }
 
 .combo-box .list-cell 
@@ -81,6 +83,10 @@
     -fx-text-fill: #ffffff;
     -fx-padding: 3 0 2 7;
     -fx-cell-size: 1.66667em; 
+}
+
+.combo-box .list-cell:selected {
+    -fx-background: #f00;
 }
 
 .combo-box-popup .list-view 
