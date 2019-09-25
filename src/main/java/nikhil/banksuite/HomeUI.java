@@ -32,8 +32,12 @@ import javafx.stage.StageStyle;
 
 class HomeUI extends Home {
 
+    static Record incoming;
+    ObservableList<Record> allTransactions;
+
     HomeUI() {
         super();
+        incoming = null;
     }
 
     protected ObservableList<Record> doTransactions() {
@@ -58,6 +62,7 @@ class HomeUI extends Home {
         welcome.setId("mainLabel");
 
         Stage t = new Stage();
+        t.setTitle("All Transactions");
         TableView<Record> table = new TableView<>();
         
         Task<ObservableList<Record>> transactions = new Task<ObservableList<Record>>() {
@@ -66,7 +71,19 @@ class HomeUI extends Home {
             }
         };
 
+        // Task<Void> tracker = new Task<Void>() {
+        //     @Override public Void call() {
+        //         while (true) {
+        //             if (incoming!=null) {
+        //                 table.getItems().add(incoming);
+        //                 incoming = null;
+        //             }
+        //         }
+        //     }
+        // };
+
         new Thread(transactions).start();
+        //new Thread(tracker).start();
 
         attachRecordTable(table);
         RowConstraints topPadding = new RowConstraints();
@@ -139,11 +156,13 @@ class HomeUI extends Home {
         });
 
         try {
-            table.setItems(transactions.get());
+            allTransactions = transactions.get();
+            table.setItems(allTransactions);
         } catch (Exception e) {
             new ExceptionDialog(e).show();
             System.exit(1);
         }
+        //table.setItems(doTransactions());
 
         t.setScene(new Scene(homeScreen, 800, 600));
         return t;
@@ -211,7 +230,7 @@ class HomeUI extends Home {
         Optional<String> op = dl.showAndWait(); 
         op.ifPresent(e2 -> { 
             boolean ist = cl.verifyPassword(e2);
-            if (ist) cl.generateClientStage(isDark).show();
+            if (ist) cl.generateClientStage(isDark, bots, this).show();
             else {
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.setTitle("Password");

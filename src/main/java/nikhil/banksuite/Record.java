@@ -39,7 +39,17 @@ public class Record {
         this.transactionType = new SimpleObjectProperty<TransactionType>(transactionType);
     }
 
-    public int getTransactionID() {
+    public Record(Record senderRecord) {
+        this.transactionID = new SimpleIntegerProperty(senderRecord.getTransactionID());
+        this.transactionAmount = new SimpleDoubleProperty(senderRecord.getTransactionAmount());
+        this.transactionDate = new SimpleObjectProperty<GregorianCalendar>(senderRecord.getDate());
+        this.fromID = new SimpleIntegerProperty(senderRecord.getFromID());
+        this.toID = new SimpleIntegerProperty(senderRecord.getToID());
+        this.remark = new SimpleStringProperty(senderRecord.getRemark());
+        this.transactionType = new SimpleObjectProperty<TransactionType>(senderRecord.getTransactionType());
+	}
+
+	public int getTransactionID() {
         return transactionID.get();
     }
 
@@ -66,6 +76,10 @@ public class Record {
     public String getTransactionDate() {
         SimpleDateFormat date = new SimpleDateFormat("EEEE, dd MMM YYYY HH:mm:ss z");
         return date.format(this.transactionDate.get().getTime());
+    }
+
+    public GregorianCalendar getDate() {
+        return this.transactionDate.get();
     }
 
     public void setTransactionDate(GregorianCalendar date) {

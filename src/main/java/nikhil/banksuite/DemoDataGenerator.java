@@ -2,10 +2,8 @@ package nikhil.banksuite;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 class DemoDataGenerator {
     public static ClientUI generateFakeClient() {
@@ -36,14 +34,6 @@ class DemoDataGenerator {
         FileWriter f = new FileWriter(path);
         f.write(c.toString());
         f.close();
-    }
-
-    private static Date getRandomDate() {
-        // https://www.fileformat.info/tip/java/date2millis.htm
-        Date startDate = new Date(1104537600000l); //Saturday, 1 January 2005 00:00:00
-        Date endDate = new Date(1569801600000l); //Monday, 30 September 2019 00:00:00 
-        long random = ThreadLocalRandom.current().nextLong(startDate.getTime(), endDate.getTime());
-        return new Date(random);
     }
 
     private static GregorianCalendar randomGDate() {

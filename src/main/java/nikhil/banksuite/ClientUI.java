@@ -1,19 +1,29 @@
 package nikhil.banksuite;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
@@ -22,12 +32,18 @@ class ClientUI extends Client {
     String labelColor = "#ffffff";
     String backColour = "#323232";
 
+    ObservableList<Integer> accounts;
+
     ClientUI(String name, String firstName, String lastName, 
             GregorianCalendar dateOfBirth, int accountNumber, double balance, String password) {
         super(name, firstName, lastName, dateOfBirth, accountNumber, balance, password);
     }
 
-    public Stage generateClientStage(boolean isDark) {
+    public void setAccounts(ArrayList<Integer> accounts) {
+        this.accounts = FXCollections.observableArrayList(accounts);
+    }
+
+    public Stage generateClientStage(boolean isDark, ObservableList<ClientUI> bots, HomeUI caller) {
         Stage out = new Stage();
         GridPane homeScreen = new GridPane();
         homeScreen.setId("homeScreen");
@@ -48,6 +64,7 @@ class ClientUI extends Client {
         Label ageLabel = new Label("Born " + this.textDateOfBirth());
         Button moreInfoBtn = new Button("More ▼");
         Button logOutBtn = new Button("Log Out");
+        Button sendMoney = new Button("+ Send Money");
         ToggleButton theme = new ToggleButton("Light");
         theme.setId("buttons");
 
@@ -59,8 +76,6 @@ class ClientUI extends Client {
         accountLabel.setId("subLabel");
         balanceLabel.setId("mainLabel");
         ageLabel.setId("subLabel");
-        moreInfoBtn.setId("buttons");
-        logOutBtn.setId("buttons");
 
         TableView<Record> table = new TableView<>();
         attachRecordTable(table);
@@ -81,19 +96,25 @@ class ClientUI extends Client {
         GridPane.setHalignment(ageLabel, HPos.CENTER);
         homeScreen.add(logOutBtn, 3, 2);
         GridPane.setHalignment(logOutBtn, HPos.RIGHT);
+        homeScreen.add(sendMoney, 2, 5);
+        GridPane.setValignment(sendMoney, VPos.BOTTOM);
+        GridPane.setHalignment(sendMoney, HPos.CENTER);
         
         homeScreen.add(table, 1, 3, 3, 1);
 
         RowConstraints r1 = new RowConstraints();
         r1.setPercentHeight(10);
         RowConstraints r2 = new RowConstraints();
-        r2.setPercentHeight(87);
+        r2.setPercentHeight(77);
         RowConstraints topPadding = new RowConstraints();
         topPadding.setPercentHeight(0.5);
         RowConstraints bottomPadding = new RowConstraints();
         bottomPadding.setPercentHeight(2.5);
         RowConstraints expandColumn = new RowConstraints();
         expandColumn.setPercentHeight(0);
+        RowConstraints tools = new RowConstraints();
+        tools.setPercentHeight(10);
+
         ColumnConstraints c1 = new ColumnConstraints();
         c1.setPercentWidth(32);
         ColumnConstraints c2 = new ColumnConstraints();
@@ -121,6 +142,10 @@ class ClientUI extends Client {
                 r2.setPercentHeight(r2.getPercentHeight()+8);
                 moreInfoBtn.setText("More ▼");
             }
+        });
+
+        sendMoney.setOnAction(e -> {
+            sendMoneyDialog(isDark, bots, caller).show();
         });
 
         homeScreen.getRowConstraints().addAll(topPadding, r1, expandColumn, r2, bottomPadding);
@@ -171,5 +196,97 @@ class ClientUI extends Client {
         recordsTable.getColumns().add(remCol);        
     }
 
+    public Stage sendMoneyDialog(boolean isDark, ObservableList<ClientUI> bots, HomeUI caller) {
+        Stage m = new Stage();
+        GridPane gd = new GridPane();
+        m.setScene(new Scene(gd, 120, 200));
 
+        if (isDark) gd.getStylesheets().add("Theme.css");
+        else gd.getStylesheets().add("LightTheme.css");
+        int sep = 20;
+
+        RowConstraints first = new RowConstraints();
+        first.setPercentHeight(sep);
+        RowConstraints second = new RowConstraints();
+        second.setPercentHeight(sep);
+        RowConstraints third = new RowConstraints();
+        third.setPercentHeight(sep);
+        RowConstraints fourth = new RowConstraints();
+        fourth.setPercentHeight(sep);
+        RowConstraints fifth = new RowConstraints();
+        fifth.setPercentHeight(sep);
+
+        gd.getRowConstraints().addAll(first, second, third, fourth, fifth);
+
+        Label pick = new Label("Pick an account: ");
+        pick.setId("subLabel");
+        gd.add(pick, 0, 0);
+        GridPane.setValignment(pick, VPos.BOTTOM);
+
+        ComboBox<Integer> accPicker = new ComboBox<Integer>(accounts);
+        gd.add(accPicker, 0, 1);
+        GridPane.setValignment(accPicker, VPos.TOP);
+
+        Label enter = new Label("Transaction Amount(Balance: ₹" + this.getBalance() + "):");
+        enter.setId("subLabel");
+        gd.add(enter, 0, 2);
+        GridPane.setValignment(enter, VPos.BOTTOM);
+
+        TextField amt = new TextField();
+        gd.add(amt, 0, 3);
+        GridPane.setValignment(amt, VPos.TOP);
+
+        HBox options = new HBox();
+        Button Ok = new Button("Send");
+        Ok.setStyle("-fx-padding: 0 10 0 0");
+        Button Cancel = new Button("Cancel");
+        Region spacer = new Region();
+        spacer.setPrefWidth(20);
+        options.getChildren().addAll(Ok, Cancel, spacer);
+        gd.add(options, 0, 4);
+        options.setStyle("-fx-padding: 0 0 0 60");
+        GridPane.setValignment(options, VPos.CENTER);
+        GridPane.setHalignment(options, HPos.RIGHT);
+
+        Ok.setOnAction(e -> {
+            double am = Double.parseDouble(amt.getText());
+            if (am<this.getBalance()) {
+                String remark = "VIA NET BANKING";
+                ClientUI sender = this;
+                ClientUI receiver = null;
+                for (var bot : bots) {
+                    if (bot.getAccountNumber() == accPicker.getValue()) {
+                        receiver = bot;
+                        break;
+                    }
+                }
+                if (receiver!=null) {
+                    sender.removeBalance(am);
+                    receiver.addBalance(am);
+                    Record senderRecord = new Record(Home.transactionCount, am, new GregorianCalendar(), 
+                        TransactionType.Debit, sender.getAccountNumber(), receiver.getAccountNumber(), remark);
+                    Record receiverRecord = new Record(Home.transactionCount++, am, new GregorianCalendar(), 
+                        TransactionType.Credit, sender.getAccountNumber(), 
+                        receiver.getAccountNumber(), remark);
+                    sender.transactions.add(senderRecord);
+                    receiver.transactions.add(receiverRecord);
+                    caller.allTransactions.add(senderRecord);
+                    m.close();
+                } else {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Failed");
+                    alert.setHeaderText("User doesnt exist!");
+                    alert.setContentText("Please check the account number and try again.");
+                    alert.showAndWait();
+                }
+                
+            }
+        });
+
+        Cancel.setOnAction(e2 -> {
+            m.close();
+        });
+
+        return m;
+    }
 }

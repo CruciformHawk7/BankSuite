@@ -26,9 +26,9 @@ class Home {
     private static long accountCreation = 788918400000l;
     //Sunday, 1 January 1995 00:00
 
-    private ObservableList<ClientUI> bots;
-    public int transactionCount;
-    List<Integer> accountIds;
+    public static ObservableList<ClientUI> bots;
+    public static int transactionCount;
+    ArrayList<Integer> accountIds;
 
     Home() {
         bots = FXCollections.observableArrayList();
@@ -42,6 +42,8 @@ class Home {
                     acNo, getRandomNumber(5000, 50000), "password");
             bots.add(cl);
         }
+        for (int i = 0; i<bots.size()-1; i++)  
+            bots.get(i).setAccounts(accountIds);
         transactionCount = 0;
     }
 
@@ -56,32 +58,41 @@ class Home {
         String remark;
         if (receiver == sender && receiver < (BOTCOUNT - 1)) receiver++; 
         else if (receiver == sender && receiver == BOTCOUNT) receiver--;
-        //System.err.println(receiver);
         
         TransactionType transactionType = generateRandomType();
         GregorianCalendar transactionDate = nextDate(accountCreation);
         double transactionAmount = (double)getRandomNumber(200,15000);
 
+        Record senderRecord, receiverRecord;
+
         if (transactionType == TransactionType.Debit) {
+            // sender = debit, receiver = credit
             remark = DEBITREMARKS[getRandomNumber(0, DEBITREMARKS.length-1)];
             if(transactionAmount>bots.get(sender).getBalance()) return null;
             bots.get(sender).removeBalance(transactionAmount);
             bots.get(receiver).addBalance(transactionAmount);
+            senderRecord = new Record(transactionCount, transactionAmount, transactionDate, 
+                TransactionType.Debit, bots.get(sender).getAccountNumber(), bots.get(receiver).getAccountNumber(), remark);
+            receiverRecord = new Record(transactionCount++, transactionAmount, transactionDate, 
+                TransactionType.Credit, bots.get(sender).getAccountNumber(), 
+                bots.get(receiver).getAccountNumber(), remark);
+            bots.get(sender).transactions.add(senderRecord);
+            bots.get(receiver).transactions.add(receiverRecord);
         } else {
             remark = CREDITREMARKS[getRandomNumber(0, CREDITREMARKS.length-1)];
             if(transactionAmount>bots.get(receiver).getBalance()) return null;
             bots.get(sender).addBalance(transactionAmount);
             bots.get(receiver).removeBalance(transactionAmount);
+            senderRecord = new Record(transactionCount, transactionAmount, transactionDate, 
+                TransactionType.Credit, bots.get(sender).getAccountNumber(), bots.get(receiver).getAccountNumber(), remark);
+            receiverRecord = new Record(transactionCount++, transactionAmount, transactionDate, 
+                TransactionType.Debit, bots.get(sender).getAccountNumber(), 
+                bots.get(receiver).getAccountNumber(), remark);
+            bots.get(sender).transactions.add(receiverRecord);
+            bots.get(receiver).transactions.add(senderRecord);
         }
 
-        Record senderRecord = new Record(transactionCount, transactionAmount, transactionDate, 
-            transactionType, bots.get(sender).getAccountNumber(), bots.get(receiver).getAccountNumber(), remark);
-        Record receiverRecord = new Record(transactionCount++, transactionAmount, transactionDate, 
-            toggleTransactionType(transactionType), bots.get(sender).getAccountNumber(), bots.get(receiver).getAccountNumber()
-            , remark);
-
-        bots.get(sender).transactions.add(senderRecord);
-        bots.get(receiver).transactions.add(receiverRecord);
+        
 
         return senderRecord;
     }
