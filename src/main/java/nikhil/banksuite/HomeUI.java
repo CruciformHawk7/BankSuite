@@ -23,6 +23,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -152,8 +153,17 @@ class HomeUI extends Home {
                     else passwordInput(cl, true);
                 }
             });
+            record.setOnKeyPressed((p) -> {
+                if (p.getCode().equals(KeyCode.ENTER)) {
+                    System.err.println("Row: Enter Pressed");
+                    int bot = record.getItem().getFromID();
+                    ClientUI cl = super.getBotAt(getBotId(bot));
+                    if (theme.getText()=="Dark") passwordInput(cl, false);
+                    else passwordInput(cl, true);
+                }
+            });
             return record;
-        });
+        });        
 
         try {
             allTransactions = transactions.get();
@@ -162,7 +172,10 @@ class HomeUI extends Home {
             new ExceptionDialog(e).show();
             System.exit(1);
         }
-        //table.setItems(doTransactions());
+
+        t.setOnCloseRequest((exit) -> {
+            System.exit(0);
+        });
 
         t.setScene(new Scene(homeScreen, 800, 600));
         return t;
