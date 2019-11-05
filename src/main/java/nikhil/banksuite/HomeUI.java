@@ -72,19 +72,7 @@ class HomeUI extends Home {
             }
         };
 
-        // Task<Void> tracker = new Task<Void>() {
-        //     @Override public Void call() {
-        //         while (true) {
-        //             if (incoming!=null) {
-        //                 table.getItems().add(incoming);
-        //                 incoming = null;
-        //             }
-        //         }
-        //     }
-        // };
-
         new Thread(transactions).start();
-        //new Thread(tracker).start();
 
         attachRecordTable(table);
         RowConstraints topPadding = new RowConstraints();
