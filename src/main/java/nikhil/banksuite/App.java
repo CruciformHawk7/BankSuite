@@ -14,7 +14,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage = new HomeUI().stageGenerator();
+        stage = new HomeUI().loginStage();
         stage.show();
     }
 
