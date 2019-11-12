@@ -14,11 +14,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -35,10 +37,146 @@ class HomeUI extends Home {
 
     static Record incoming;
     ObservableList<Record> allTransactions;
+    private static boolean debugMode = true;
 
     HomeUI() {
         super();
         incoming = null;
+    }
+
+    public void updateList(ListView<String> list) {
+        for (var ty: bots) {
+            list.getItems().add(Integer.toString(ty.getAccountNumber()) 
+                + "\t" + ty.getFirstName() + " " + ty.getLastName());
+        }
+    }
+
+    public Stage loginStage() {
+        GridPane login = new GridPane();
+        login.getStylesheets().add("fonts.css");
+        login.getStylesheets().add("Theme.css");
+        Stage out = new Stage();
+
+        Task<ObservableList<Record>> transactions = new Task<ObservableList<Record>>() {
+            @Override public ObservableList<Record> call() {
+                return doTransactions();
+            }
+        };
+
+        new Thread(transactions).start();
+
+        Label uname;
+        uname = new Label("Login!");
+        ListView<String> users;
+        uname.setId("mainLabel");
+        Button lo = new Button("Login");
+        ToggleButton theme = new ToggleButton("Dark");
+
+        login.getStylesheets().clear();
+        login.getStylesheets().add("LightTheme.css");
+        out.getIcons().clear();
+        out.getIcons().add(new Image("bank2.png"));
+
+        theme.setOnAction(e -> {
+            if (theme.getText().equals("Light")) {
+                theme.setText("Dark");
+                login.getStylesheets().clear();
+                login.getStylesheets().add("LightTheme.css");
+                out.getIcons().clear();
+                out.getIcons().add(new Image("bank2.png"));
+            } else {
+                theme.setText("Light");
+                login.getStylesheets().clear();
+                login.getStylesheets().add("Theme.css");
+                out.getIcons().clear();
+                out.getIcons().add(new Image("bank.png"));
+            }            
+        });
+
+        TextField username = new TextField();
+        username.setText("UserID");
+
+        if (debugMode) {
+            users = new ListView<String>();
+            updateList(users);
+            login.add(users, 1, 4, 2, 1);
+        }
+
+        lo.setOnAction(e -> {
+            if (username.getText().toLowerCase().equals("admin")) {
+                out.hide();
+                if (theme.getText().equals("Light"))
+                    this.stageGenerator(false).show();
+                else 
+                    this.stageGenerator(true).show();
+            } else {
+                int bot = Integer.parseInt(username.getText());
+                try {
+                    ClientUI cl = super.getBotAt(getBotId(bot));
+                    if (theme.getText()=="Dark") passwordInput(cl, false);
+                    else passwordInput(cl, true);
+                } catch (IndexOutOfBoundsException ex) {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("User not found");
+                    alert.setHeaderText("The username was not found");
+                    alert.setContentText("If you are a new user, try signing up!");
+
+                    alert.showAndWait();
+                }
+            }
+        });
+
+        RowConstraints topPad = new RowConstraints();
+        topPad.setPercentHeight(3);
+        RowConstraints row1 = new RowConstraints();
+        row1.setPercentHeight(25);
+        RowConstraints row2 = new RowConstraints();
+        row2.setPercentHeight(35);
+        RowConstraints row3 = new RowConstraints();
+        row3.setPercentHeight(35);
+        RowConstraints row4 = new RowConstraints();
+        row4.setPercentHeight(0);
+        RowConstraints bottom = new RowConstraints();
+        bottom.setPercentHeight(2);
+
+        ColumnConstraints leftPad = new ColumnConstraints();
+        leftPad.setPercentWidth(2);
+        ColumnConstraints column1 = new ColumnConstraints();
+        column1.setPercentWidth(48);
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setPercentWidth(48);
+        ColumnConstraints rightPad = new ColumnConstraints();
+        rightPad.setPercentWidth(2);
+
+        if (debugMode) {
+            row1.setPercentHeight(10);
+            row2.setPercentHeight(10);
+            row3.setPercentHeight(10);
+            row4.setPercentHeight(65);
+            out.setScene(new Scene(login, 600, 600));
+        } else {
+            out.setScene(new Scene(login, 600, 200));
+        }
+
+        GridPane.setHalignment(theme, HPos.RIGHT);
+        GridPane.setValignment(theme, VPos.TOP);
+
+        login.getRowConstraints().addAll(topPad, row1, row2, row3, row4, bottom);
+        login.getColumnConstraints().addAll(leftPad, column1, column2, rightPad);
+        
+        login.add(uname,1,1);
+        login.add(username,1, 2, 2, 1);
+        login.add(lo, 1, 3, 2, 1);
+        login.add(theme, 2, 1);
+
+        try {
+            allTransactions = transactions.get();
+        } catch (Exception e) {
+            new ExceptionDialog(e).show();
+            System.exit(1);
+        }
+
+        return out;
     }
 
     protected ObservableList<Record> doTransactions() {
@@ -52,7 +190,7 @@ class HomeUI extends Home {
         return transactions;
     }
 
-    public Stage stageGenerator() {
+    public Stage stageGenerator(boolean colourTheme) {
         GridPane homeScreen = new GridPane();
         homeScreen.getStylesheets().add("fonts.css");
         homeScreen.getStylesheets().add("Theme.css");
@@ -65,15 +203,7 @@ class HomeUI extends Home {
         Stage t = new Stage();
         t.setTitle("All Transactions");
         TableView<Record> table = new TableView<>();
-        
-        Task<ObservableList<Record>> transactions = new Task<ObservableList<Record>>() {
-            @Override public ObservableList<Record> call() {
-                return doTransactions();
-            }
-        };
-
-        new Thread(transactions).start();
-
+        table.setItems(allTransactions);
         attachRecordTable(table);
         RowConstraints topPadding = new RowConstraints();
         topPadding.setPercentHeight(2);
@@ -125,6 +255,21 @@ class HomeUI extends Home {
             }
         });
 
+        if (colourTheme) {
+            //switch to light
+            theme.setText("Dark");
+            homeScreen.getStylesheets().clear();
+            homeScreen.getStylesheets().add("LightTheme.css");
+            t.getIcons().clear();
+            t.getIcons().add(new Image("bank2.png"));
+        } else {
+            theme.setText("Light");
+            homeScreen.getStylesheets().clear();
+            homeScreen.getStylesheets().add("Theme.css");
+            t.getIcons().clear();
+            t.getIcons().add(new Image("bank.png"));
+        }
+
         transact.setOnAction(e4 -> {
             var p = super.nextTransaction();
             while (p==null) p = super.nextTransaction();
@@ -153,13 +298,6 @@ class HomeUI extends Home {
             return record;
         });        
 
-        try {
-            allTransactions = transactions.get();
-            table.setItems(allTransactions);
-        } catch (Exception e) {
-            new ExceptionDialog(e).show();
-            System.exit(1);
-        }
 
         t.setOnCloseRequest((exit) -> {
             System.exit(0);
