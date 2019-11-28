@@ -238,7 +238,7 @@ class ClientUI extends Client {
         gd.add(pick, 1, 0);
         GridPane.setValignment(pick, VPos.CENTER);
 
-        ComboBox<Integer> accPicker = new ComboBox<Integer>(accounts);
+        ComboBox<Integer> accPicker = new ComboBox<Integer>(FXCollections.observableArrayList(caller.accountIds));
         gd.add(accPicker, 1, 1);
         GridPane.setValignment(accPicker, VPos.TOP);
 
