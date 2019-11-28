@@ -70,7 +70,7 @@
     -fx-text-fill: -fx-text-inner-color;
 }
 
-.combo-box-base  
+.combo-box-base .date-picker
 {
     -fx-skin: "com.sun.javafx.scene.control.skin.ComboBoxBaseSkin";
     -fx-background-color: white, white, white, white;

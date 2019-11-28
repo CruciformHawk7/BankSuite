@@ -139,7 +139,7 @@
     -fx-text-fill: -fx-text-inner-color;
 }
 
-.combo-box-base  
+.combo-box-base .date-picker
 {
     -fx-background-color: #6b6b6b;
     -fx-background-radius: 5, 5, 4, 3;
