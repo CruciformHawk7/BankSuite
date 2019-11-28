@@ -49,6 +49,7 @@ class HomeUI extends Home {
     }
 
     public void updateList(ListView<String> list) {
+        list.getItems().clear();
         for (var ty: bots) {
             list.getItems().add(Integer.toString(ty.getAccountNumber()) 
                 + "\t" + ty.getFirstName() + " " + ty.getLastName());
