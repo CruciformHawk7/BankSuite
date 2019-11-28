@@ -50,6 +50,7 @@ public class Client {
         balance = new SimpleDoubleProperty();
         password = new SimpleStringProperty();
         age = new SimpleIntegerProperty();
+        transactions = FXCollections.observableArrayList();
     }
 
     Client(String name, String firstName, String lastName, 
