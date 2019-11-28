@@ -58,6 +58,7 @@ class HomeUI extends Home {
         login.getStylesheets().add("fonts.css");
         login.getStylesheets().add("Theme.css");
         Stage out = new Stage();
+        out.setTitle("Welcome, please login");
 
         Task<ObservableList<Record>> transactions = new Task<ObservableList<Record>>() {
             @Override public ObservableList<Record> call() {
@@ -72,6 +73,7 @@ class HomeUI extends Home {
         ListView<String> users = new ListView<String>();
         uname.setId("mainLabel");
         Button lo = new Button("Login");
+        lo.setDefaultButton(true);
         Button signup = new Button("Sign up");
         ToggleButton theme = new ToggleButton("Dark");
 
@@ -108,9 +110,9 @@ class HomeUI extends Home {
             if (username.getText().toLowerCase().equals("admin")) {
                 out.hide();
                 if (theme.getText().equals("Light"))
-                    this.stageGenerator(false).show();
+                    stageGenerator(false).show();
                 else 
-                    this.stageGenerator(true).show();
+                    stageGenerator(true).show();
             } else {
                 int bot = Integer.parseInt(username.getText());
                 try {
@@ -188,6 +190,7 @@ class HomeUI extends Home {
 
     Stage signUp(boolean isDark, ListView<String> users) {
         Stage out = new Stage();
+        out.setTitle("Sign up");
         GridPane screen = new GridPane();
         screen.getStylesheets().addAll("fonts.css", "Theme.css");
         ClientUI newClient = new ClientUI();
@@ -223,6 +226,7 @@ class HomeUI extends Home {
         pwc.setPromptText("Confirm Password");
         Button submit = new Button("Sign up");
         Button cancel = new Button("Cancel");
+        submit.setDefaultButton(true);
 
         screen.setHgap(5);
         screen.setVgap(5);
@@ -291,6 +295,10 @@ class HomeUI extends Home {
                 updateList(users);
                 out.close();
             }
+        });
+
+        cancel.setOnAction((e) -> {
+            out.close();
         });
         
         out.setScene(new Scene(screen, 350, 300));
