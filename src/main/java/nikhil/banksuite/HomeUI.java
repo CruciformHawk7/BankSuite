@@ -287,6 +287,7 @@ class HomeUI extends Home {
                 newClient.setAccountNumber(acN);
                 newClient.addBalance(Double.parseDouble(txtBalance.getText())); 
                 newClient.setPassword(pw.getText());
+                accountIds.add(acN);
                 bots.add(newClient);
                 updateList(users);
                 out.close();
