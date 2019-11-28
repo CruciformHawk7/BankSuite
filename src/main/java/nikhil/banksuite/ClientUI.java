@@ -36,6 +36,10 @@ class ClientUI extends Client {
 
     ObservableList<Integer> accounts;
 
+    ClientUI() {
+        super();
+    }
+
     ClientUI(String name, String firstName, String lastName, 
             GregorianCalendar dateOfBirth, int accountNumber, double balance, String password) {
         super(name, firstName, lastName, dateOfBirth, accountNumber, balance, password);
