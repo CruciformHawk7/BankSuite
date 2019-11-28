@@ -3,9 +3,6 @@ package nikhil.banksuite;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
 import java.util.Optional;
-
-import javax.swing.GroupLayout.Alignment;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -100,7 +97,7 @@ class HomeUI extends Home {
         });
 
         TextField username = new TextField();
-        username.setText("UserID");
+        username.setPromptText("UserID");
 
         if (debugMode) {
             updateList(users);
@@ -287,6 +284,8 @@ class HomeUI extends Home {
                 newClient.setAccountNumber(acN);
                 newClient.addBalance(Double.parseDouble(txtBalance.getText())); 
                 newClient.setPassword(pw.getText());
+                newClient.transactions.add(new Record(transactionCount++, Double.parseDouble(txtBalance.getText()), 
+                    new GregorianCalendar(), TransactionType.Debit, 0, acN, "OPENING BALANCE"));
                 accountIds.add(acN);
                 bots.add(newClient);
                 updateList(users);
