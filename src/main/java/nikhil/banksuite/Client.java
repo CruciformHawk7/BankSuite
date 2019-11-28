@@ -41,6 +41,17 @@ public class Client {
 
     ObservableList<Record> transactions;
 
+    Client() {
+        name = new SimpleStringProperty();
+        firstName = new SimpleStringProperty();
+        lastName = new SimpleStringProperty();
+        dateOfBirth = new SimpleObjectProperty<GregorianCalendar>();
+        accountNumber = new SimpleIntegerProperty();
+        balance = new SimpleDoubleProperty();
+        password = new SimpleStringProperty();
+        age = new SimpleIntegerProperty();
+    }
+
     Client(String name, String firstName, String lastName, 
            GregorianCalendar dateOfBirth, int accountNumber, double balance, String password) {
         this.name = new SimpleStringProperty(name);
@@ -88,6 +99,14 @@ public class Client {
 
     public StringProperty nameProperty() {
         return name;
+    }
+
+    public void setFirstName(String name) {
+        this.firstName.set(name);
+    }
+
+    public void setLastName(String name) {
+        this.lastName.set(name);
     }
 
     public String getFirstName() {
