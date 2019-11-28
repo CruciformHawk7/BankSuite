@@ -1,7 +1,10 @@
 package nikhil.banksuite;
 
+import java.time.ZoneId;
 import java.util.GregorianCalendar;
 import java.util.Optional;
+
+import javax.swing.GroupLayout.Alignment;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +15,7 @@ import javafx.geometry.VPos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -70,6 +74,7 @@ class HomeUI extends Home {
         ListView<String> users;
         uname.setId("mainLabel");
         Button lo = new Button("Login");
+        Button signup = new Button("Sign up");
         ToggleButton theme = new ToggleButton("Dark");
 
         login.getStylesheets().clear();
@@ -126,6 +131,10 @@ class HomeUI extends Home {
             }
         });
 
+        signup.setOnAction((e) -> {
+            ((theme.getText().equals("Dark")) ? this.signUp(false):this.signUp(true)).show();
+        });
+
         RowConstraints topPad = new RowConstraints();
         topPad.setPercentHeight(3);
         RowConstraints row1 = new RowConstraints();
@@ -176,6 +185,114 @@ class HomeUI extends Home {
             System.exit(1);
         }
 
+        return out;
+    }
+
+    Stage signUp(boolean isDark) {
+        Stage out = new Stage();
+        GridPane screen = new GridPane();
+        screen.getStylesheets().addAll("fonts.css", "Theme.css");
+        ClientUI newClient = new ClientUI();
+
+        if (!isDark) {
+            screen.getStylesheets().clear();
+            screen.getStylesheets().addAll("fonts.css", "LightTheme.css");
+        }
+
+        Label lblWelcome = new Label("Sign up");
+        lblWelcome.setId("mainLabel");
+
+        Label lblAccNo = new Label();
+        int acNo = getRandomNumber(0, 200);
+        while (accountIds.contains(acNo)) acNo = getRandomNumber(0, 200);
+        final int acN = acNo;
+        lblAccNo.setText("Account Number: " + Integer.toString(acNo));
+        lblAccNo.setId("subLabel");
+
+        TextField txtFirstName = new TextField();
+        txtFirstName.setPromptText("First Name");
+
+        TextField txtLastName = new TextField();
+        txtLastName.setPromptText("Last Name");
+
+        DatePicker dpDOB = new DatePicker();
+        dpDOB.setPromptText("Date of Birth");
+        TextField txtBalance = new TextField();
+        txtBalance.setPromptText("Balance");
+        PasswordField pw = new PasswordField();
+        pw.setPromptText("Password");
+        PasswordField pwc = new PasswordField();
+        pwc.setPromptText("Confirm Password");
+        Button submit = new Button("Sign up");
+        Button cancel = new Button("Cancel");
+
+        screen.setHgap(5);
+        screen.setVgap(5);
+        screen.add(lblWelcome, 1, 1);
+        screen.add(lblAccNo, 1, 2);
+        screen.add(txtFirstName, 1, 3);
+        screen.add(txtLastName, 2, 3);
+        screen.add(dpDOB, 1, 4);
+        screen.add(txtBalance, 2, 4);
+        screen.add(pw, 1, 5);
+        screen.add(pwc, 2, 5);
+        screen.add(cancel, 1, 6);
+        screen.add(submit, 2, 6);
+        
+
+        RowConstraints topPad = new RowConstraints();
+        topPad.setPercentHeight(5);
+        RowConstraints r1 = new RowConstraints();
+        r1.setPercentHeight(15);
+        RowConstraints r2 = new RowConstraints();
+        r2.setPercentHeight(15);
+        RowConstraints r3 = new RowConstraints();
+        r3.setPercentHeight(15);
+        RowConstraints r4 = new RowConstraints();
+        r4.setPercentHeight(15);
+        RowConstraints r5 = new RowConstraints();
+        r5.setPercentHeight(15);
+        RowConstraints r6 = new RowConstraints();
+        r6.setPercentHeight(15);
+        RowConstraints bottomPad = new RowConstraints();
+        bottomPad.setPercentHeight(5);
+
+        ColumnConstraints left = new ColumnConstraints();
+        left.setPercentWidth(5);
+        ColumnConstraints c1 = new ColumnConstraints();
+        c1.setPercentWidth(45);
+        ColumnConstraints c2 = new ColumnConstraints();
+        c2.setPercentWidth(45);
+        ColumnConstraints right = new ColumnConstraints();
+        right.setPercentWidth(5);
+        GridPane.setHalignment(submit, HPos.CENTER);
+        out.setResizable(false);
+        
+        screen.getRowConstraints().addAll(topPad, r1, r2, r3, r4, r5, r6, bottomPad);
+        screen.getColumnConstraints().addAll(left, c1, c2, right);
+
+        submit.setOnAction((e) -> {
+            boolean conditionMatches = false;
+            if (pw.getText().equals(pwc.getText())) conditionMatches = true; 
+            if (conditionMatches) {
+                boolean isName = false;
+                for (var bot: bots) 
+                    if (bot.getName() == txtFirstName.getText()) isName=true;
+                GregorianCalendar dob = GregorianCalendar.from(dpDOB.getValue().atStartOfDay(ZoneId.systemDefault()));
+                newClient.setName((isName)?txtFirstName.getText()+txtLastName.getText():txtFirstName.getText());
+                newClient.setFirstName(txtFirstName.getText());
+                newClient.setLastName(txtLastName.getText()); 
+                newClient.setDateOfBirth(dob);
+                newClient.setAccountNumber(acN);
+                newClient.addBalance(Double.parseDouble(txtBalance.getText())); 
+                newClient.setPassword(pw.getText());
+                bots.add(newClient);
+            }
+        });
+        
+        out.setScene(new Scene(screen, 350, 300));
+        out.initStyle(StageStyle.UTILITY);
+        
         return out;
     }
 
