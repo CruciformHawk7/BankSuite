@@ -71,7 +71,7 @@ class HomeUI extends Home {
 
         Label uname;
         uname = new Label("Login!");
-        ListView<String> users;
+        ListView<String> users = new ListView<String>();
         uname.setId("mainLabel");
         Button lo = new Button("Login");
         Button signup = new Button("Sign up");
@@ -102,7 +102,6 @@ class HomeUI extends Home {
         username.setText("UserID");
 
         if (debugMode) {
-            users = new ListView<String>();
             updateList(users);
             login.add(users, 1, 4, 2, 1);
         }
@@ -132,7 +131,7 @@ class HomeUI extends Home {
         });
 
         signup.setOnAction((e) -> {
-            ((theme.getText().equals("Dark")) ? this.signUp(false):this.signUp(true)).show();
+            ((theme.getText().equals("Dark")) ? this.signUp(false, users):this.signUp(true, users)).show();
         });
 
         RowConstraints topPad = new RowConstraints();
@@ -177,6 +176,7 @@ class HomeUI extends Home {
         login.add(username,1, 2, 2, 1);
         login.add(lo, 1, 3, 2, 1);
         login.add(theme, 2, 1);
+        login.add(signup, 2, 3);
 
         try {
             allTransactions = transactions.get();
@@ -188,7 +188,7 @@ class HomeUI extends Home {
         return out;
     }
 
-    Stage signUp(boolean isDark) {
+    Stage signUp(boolean isDark, ListView<String> users) {
         Stage out = new Stage();
         GridPane screen = new GridPane();
         screen.getStylesheets().addAll("fonts.css", "Theme.css");
@@ -287,6 +287,8 @@ class HomeUI extends Home {
                 newClient.addBalance(Double.parseDouble(txtBalance.getText())); 
                 newClient.setPassword(pw.getText());
                 bots.add(newClient);
+                updateList(users);
+                out.close();
             }
         });
         
