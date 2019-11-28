@@ -116,7 +116,7 @@ class Home {
         return date;
     }
 
-    private static int getRandomNumber(int min, int max) {
+    protected static int getRandomNumber(int min, int max) {
         Random r = new Random();
         return r.nextInt(max-min+1)+min;
     }
