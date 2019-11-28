@@ -14,8 +14,12 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage = new HomeUI().loginStage();
-        stage.show();
+        try {
+            stage = new HomeUI().loginStage();
+            stage.show();
+        } catch (Exception e) {
+            new ExceptionDialog("Error occured" ,e).show();
+        }
     }
 
     public static void secondMain(String[] args) {
